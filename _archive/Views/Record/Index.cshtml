@@ -1,30 +1,84 @@
-﻿@model IEnumerable<RecordsModel>;
+﻿@model IEnumerable<RecordsModel>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Records";
+
+    Pagination pagination = new Pagination();
+
+    int pageNo = 0;
+
+    if(ViewBag.Pagination != null)
+    {
+        pagination = ViewBag.Pagination;
+        pageNo = pagination.CurrentPage;
+    }
 }
 
-<h1>Records</h1>
+<h3>Archive Records</h3>
+<hr class="my-3" />
 
-<table>
-    <thead>
-       <tr>
-        <th>
-            Change Set
-        </th>
-        <th>
-            Description
-        </th>
-       </tr>
+<div class="d-flex justify-content-between my-2">
+    <div>
+        <a class="nav-link ml-0 px-0" asp-controller="Record" asp-action="Create">Create New Record</a>
+    </div>
+    <div >
+        @using (Html.BeginForm())
+        {
+            <div class="d-flex align-items-center">
+                @Html.TextBox("key_search",ViewBag.FilterValue as string,new {@class="form-control",@placeholder="Search by.."})
+                <button class="btn search-btn " type="submit">Search</button>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+<table  class="table">
+  <thead class="thead-turkcell">
+    <tr>
+          <th>@Html.ActionLink("Archive ID","Index","Record",new {sort_Order = "AchiveID"},null)</th>
+          <th>@Html.ActionLink("Changeset ID","Index","Record",new {sort_Order = "ChangesetID"},null)</th>
+          <th>@Html.ActionLink("BPM NO","Index","Record",new {sort_Order = "BPMNo"},null)</th>
+          <th>@Html.ActionLink("User","Index","Record",new {sort_Order = "UserID"},null)</th>
+          <th>@Html.ActionLink("Title","Index","Record",new {sort_Order = "Title"},null)</th>
+          <th>Release Date</th>
+          <th>Status</th>
         
-    </thead>
-    <tbody>
-        @foreach(var record in Model)
+    </tr>
+  </thead>
+  <tbody>
+    @foreach(var record in Model)
         {
         <tr>
+            <td>@record.ArchiveID</td>
             <td>@record.ChangesetID</td>
-            <td>@record.Description</td>
+            <td>@record.BPMNo</td>
+            <td>@record.UserID</td>
+            <td>@(record.Title.Length > 10  ? record.Title.Substring(0,10) + "..." : record.Title)</td>
+            <td>@record.ReleaseTime</td>
+            <td>@(record.Status.Length > 10  ? record.Status.Substring(0,10) + "..." : record.Status)</td>
+            <td><a class="nav-link" asp-route-id="@record.ArchiveID" asp-action="Details" asp-controller="Record">Details</a></td>
         </tr>
         }
-        
-    </tbody>
+  </tbody>
 </table>
+
+<div class="container">
+    @if (pagination.TotalPages > 1)
+    {
+        <ul class="pagination justify-content-center">
+            @for(var pge = pagination.StartPage; pge <= pagination.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pagination.CurrentPage?"active" :"")">
+                    <a class="page-link" asp-controller="Record" asp-action="Index" asp-route-pg="@pge">
+                        @pge
+                    </a>
+                </li>
+
+            }
+        </ul>
+
+    }
+</div>
+
+ 

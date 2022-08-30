@@ -1,9 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Qwitcher+Grypen&display=swap');
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+}
+
+.turkcell-bg-color-blue, .search-btn {
+    background-color: #2855AC !important;
+    color: #fff;
+}
+
+.btn.search-btn:hover{
+    color:#fff !important;
+}
+
+
+.archive-logo-text {
+    font-family: 'Qwitcher Grypen', cursive !important;
+    font-size: 2rem !important;
+}
+
+.turkcell-yellow {
+    color: #FFC90A !important;
+}
+
+.turkcell-logo {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 2.125rem;
+    height: 2.125rem;
 }
 
 @media (min-width: 768px) {
-  html {
+    html {
     font-size: 16px;
   }
 }
@@ -16,3 +45,59 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+table th {
+    font-size: 13px !important;
+    background-color: #FCB510 !important;
+    color: #fff;
+}
+
+table th a{
+    color:#fff !important;
+    text-decoration:none !important; 
+}
+
+table {
+    table-layout: fixed;
+}
+
+table td {
+    width: 33%;
+    border: 1px solid rgba(51, 51, 51, 0.168);
+    text-align:center;
+   /* overflow: auto; */
+}
+
+table {
+    text-align: center !important;
+}
+
+
+/*Bootstrap dominant classes - adjusted classes with '!important'*/
+.page-link {
+    background-color: #2855AC !important;
+    border: 1px solid #fff !important;
+    color: #fff !important;
+}
+
+    .page-link:focus {
+        color: #0a58ca;
+        background-color: #FFC90A !important;
+        box-shadow: none !important;
+    }
+
+    .page-link:hover {
+        z-index: 2;
+        color: #fff !important;
+        background-color: #e9ecef;
+        border-color: none !important;
+    }
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #FFC90A !important;
+}
+
+

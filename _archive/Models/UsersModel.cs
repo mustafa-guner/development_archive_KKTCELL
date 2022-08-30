@@ -1,23 +1,35 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using _archive.Data.Enums;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _archive.Models
 {
     public class UsersModel
     {
         [Key]
-        public int UserID { get; set; }
-        [Required]
+       
+        public int Id { get; set; }
+       
+
+        [DisplayName("Username")]
         public string UserName { get; set; }
-        [Required]
-        public string MiddleName { get; set; }
-  
-        public string MobileNo { get; set; }
-        [Required]
+       
+
         public string Email { get; set; }
-        [Required]
+      
         public string Password { get; set; }
-        public DateTime RegisteredAt { get; set; }
-        public DateTime LastLogin { get; set; }  
+
+        public DateTime RegisteredAt { get; set; } = DateTime.Now;
+        public DateTime LastLogin { get; set; } = DateTime.Now;
+
+        public UsersRoles Role { get; set; }
+
+
+        //Relationships with Records Model
+
+        public List <RecordsModel> RecordsModel { get; set; }  
+
 
     }
 }

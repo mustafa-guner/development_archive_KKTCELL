@@ -1,7 +1,22 @@
 ﻿
+@model UsersModel;
+
 @{
     ViewData["Title"] = "Login";
 }
 
-<h1>Login Page</h1>
 
+<div class="ilk">
+        <form style="max-width: 300px;margin: auto;">
+            <img src="logo.jpg" alt="KKTCELL Logo" class="mt-4 mb-4" height="72">
+            <h3 style="font-weight: normal;">Please Login</h3>
+
+            <input asp-for="UserName" type="email"  class="form-control" placeholder="Email Address" required autofocus/>
+
+            <input asp-for="Password" type="password"  class="form-control" placeholder="Password" required autofocus/>
+  
+            <div class="mt-2">
+                <button type="submit" class="btn btn-lg btn-primary">Login</button>
+            </div>
+        </form>
+    </div>

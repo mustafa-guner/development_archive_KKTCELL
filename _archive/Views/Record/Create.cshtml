@@ -3,23 +3,82 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h3>Creating New Archive</h3>
 
-<form>
-    
-    <div>
-        <label asp-for="Description">Title</label>
-        <input asp-for="Description" placeholder="Enter Title"/>
-    </div>
+<hr class="my-3" />
 
+<a class="nav-link px-0" asp-action="Index" asp-controller="Record">Back</a>
+
+
+<form class="form mt-2" method="POST" asp-controller="Record" asp-action="Create">
     <div>
-        <label asp-for="Description">Title</label>
-        <input asp-for="Description" placeholder="Enter Title"/>
-    </div>
-    <div>
-         <label asp-for="Description">Title</label>
-         <input asp-for="Description" placeholder="Enter Title"/>
-    </div>
-    <button>Create</button>
-</form> 
+        <div class="row">
+            <div class="col-4"> 
+                <label asp-for="Title"></label><span class="text-danger">*</span>
+                <input asp-for="Title" placeholder="Enter title" class="form-control"/>
+            </div>
+        </div>
+
+          <div class="row my-2">
+              <div class="col-4">
+                  <label asp-for="ChangesetID"></label><span class="text-danger">*</span>
+                  <input asp-for="ChangesetID" placeholder=""  class="form-control" type="number">
+            </div>
+             <div class="col-4">
+                <label asp-for="UserID"></label><span class="text-danger">*</span>
+                <input asp-for="UserID"  placeholder="" type="number"  class="form-control">
+             </div>
+               <div class="col-4">
+                <label asp-for="BPMNo"></label><span class="text-danger">*</span>
+                <input asp-for="BPMNo" class="form-control"/> 
+            </div>
+          </div>
+            
+             <div class="my-2" >
+                <label>Update Details <span class="text-danger text-small">(Optional)</span></label>
+                <textarea asp-for="UpdateDetails" placeholder="Write Something for the changes you made" class="form-control" ></textarea>
+             </div>
+ 
+
+            <div class="my-2">
+                <label asp-for="TestResults"></label><span class="text-danger">*</span>
+                <textarea asp-for="TestResults"  placeholder="Enter the results you get" class="form-control"></textarea> 
+            </div>
+
+            <div class="my-2">
+                <label asp-for="Analysis"></label><span class="text-danger">*</span>
+                <input asp-for="Analysis" class="form-control"/> 
+            </div>
+
+            <div class="row my-2">
+                <div class="col-4">
+                    <label asp-for="StartTime"></label><span class="text-danger">*</span>
+                    <input asp-for="StartTime" placeholder="" type="date"  class="form-control" >
+                </div>
+
+                 <div class="col-4">
+                    <label asp-for="EndTime"></label><span class="text-danger">*</span>
+                    <input asp-for="EndTime" placeholder="" type="date" class="form-control">
+                 </div>
+
+                 <div class="col-4">
+                    <label asp-for="ReleaseTime"></label><span class="text-danger">*</span>
+                    <input asp-for="ReleaseTime" placeholder="" type="date" class="form-control">
+                 </div>
+            </div>
+
+            <div class="my-2 row">
+                   <div class="col-4">
+                        <label asp-for="Status"></label> <span class="text-danger">*</span>
+                        <input asp-for="Status" placeholder="" type="text" class="form-control">
+                   </div>
+             </div>
+            
+        </div>
+        <div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-success mr-1">Create</button>
+            </div>
+        </div>
+    </form>  
 

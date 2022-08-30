@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using _archive.Data.Enums;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace _archive.Models
 {
@@ -8,21 +10,26 @@ namespace _archive.Models
     {
         [Key]
         public int ArchiveID { get; set; }
-        [Required]
+
+       
         [DisplayName("Changeset ID")]
         public int ChangesetID { get;set;}
-        [Required]
-        [DisplayName("User ID")]
-        public int UserID { get;set;}
-        [Required]
-        public string Description { get;set;}
-        [Required]
-        [DisplayName("Analysis No")]
-        public int AnalysisNo { get;set;}
-        [Required]
-        [DisplayName("Test Description")]
-        public string TestDescription { get;set;}
-        [Required]
+
+       
+        public string Title { get; set; }
+
+     
+        [DisplayName("Update Details")]
+        public string UpdateDetails { get;set;}
+      
+        public string Analysis { get;set;}
+
+        public int BPMNo { get; set; }
+
+        
+        [DisplayName("Test Results")]
+        public string TestResults { get;set;}
+        
 
         [DisplayName("Start Time")]
         public DateTime StartTime { get;set;}
@@ -30,8 +37,19 @@ namespace _archive.Models
         public DateTime EndTime { get;set;}
         [DisplayName("Release Time")]
         public DateTime ReleaseTime { get;set;}
-        [Required]
+       
         public string Status { get;set;}
-      
+
+        [DisplayName("Category")]
+        public RecordsCategory RecordsCategory { get; set; }    
+
+
+        //Relationships with UsersModel
+
+        public int UserID { get; set; } = 0;
+        [ForeignKey("UserID")]
+        public UsersModel User { get; set; }    
+        
+
     }
 }
