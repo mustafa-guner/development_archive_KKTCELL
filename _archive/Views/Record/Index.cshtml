@@ -1,0 +1,30 @@
+﻿@model IEnumerable<RecordsModel>;
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Records</h1>
+
+<table>
+    <thead>
+       <tr>
+        <th>
+            Change Set
+        </th>
+        <th>
+            Description
+        </th>
+       </tr>
+        
+    </thead>
+    <tbody>
+        @foreach(var record in Model)
+        {
+        <tr>
+            <td>@record.ChangesetID</td>
+            <td>@record.Description</td>
+        </tr>
+        }
+        
+    </tbody>
+</table>

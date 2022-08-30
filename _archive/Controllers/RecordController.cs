@@ -16,8 +16,10 @@ namespace _archive.Controllers
 
         public IActionResult Index()
         {
-            
-            return View();
+
+            IEnumerable<RecordsModel> recordsList = _db.RecordsModel.ToList();
+
+            return View(recordsList);
         }
 
         public IActionResult Create()
@@ -27,9 +29,42 @@ namespace _archive.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RecordsModel record)
         {
-            return View(); 
+
+            if (ModelState.IsValid)
+            {
+                _db.RecordsModel.Add(record);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(record); 
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(RecordsModel record)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.RecordsModel.Update(record);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(record);
+
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            var record = _db.RecordsModel.Find(id);
+            if (record == null) return NotFound();
+            _db.RecordsModel.Remove(record);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
