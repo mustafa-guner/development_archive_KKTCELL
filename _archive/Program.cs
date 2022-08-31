@@ -8,12 +8,13 @@ ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(configuration.GetConnectionString("TestDBConnectionString")));
 
 var app = builder.Build();
 
-
+app.UseSession();
 
 
 // Configure the HTTP request pipeline.

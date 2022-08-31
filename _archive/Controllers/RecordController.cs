@@ -18,6 +18,9 @@ namespace _archive.Controllers
 
         public IActionResult Index(string sort_Order,string key_search, string Filter_Value,int Page_No,int pg =1)
         {
+
+            if (HttpContext.Session.GetString("username") == null) return RedirectToAction("Login", "Auth", null);
+
             ViewBag.ArchiveID = String.IsNullOrEmpty(sort_Order) ? "ArchiveID" : "";
             ViewBag.ChangesetID = String.IsNullOrEmpty(sort_Order) ? "ChangesetID" : "";
             ViewBag.BPMNo = String.IsNullOrEmpty(sort_Order) ? "BPMNo" : "";
@@ -41,8 +44,8 @@ namespace _archive.Controllers
 
             if (!String.IsNullOrEmpty(key_search))
             {
-                records = records.Where(record => record.BPMNo.ToString().Contains(key_search) || record.ArchiveID.ToString().Contains(key_search) || record.Title.Contains(key_search)
-                || record.Status.Contains(key_search) || record.ChangesetID.ToString().Contains(key_search) );
+                records = records.Where(record => record.BPMNo.ToString().ToLower().Contains(key_search.ToLower()) || record.ArchiveID.ToString().ToLower().Contains(key_search.ToLower()) || record.Title.ToLower().Contains(key_search.ToLower())
+                || record.Status.ToLower().Contains(key_search.ToLower()) || record.ChangesetID.ToString().ToLower().Contains(key_search.ToLower()));
             }
 
             switch (sort_Order)
@@ -138,9 +141,10 @@ namespace _archive.Controllers
 
         }
 
-
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
+           
             var record = _db.RecordsModel.Find(id);
             if (record == null) return NotFound();
             _db.RecordsModel.Remove(record);

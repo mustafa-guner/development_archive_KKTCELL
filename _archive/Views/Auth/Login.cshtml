@@ -7,13 +7,17 @@
 
 
 <div class="ilk">
-        <form style="max-width: 300px;margin: auto;">
-            <img src="logo.jpg" alt="KKTCELL Logo" class="mt-4 mb-4" height="72">
+        <form style="max-width: 300px;margin: auto;" asp-controller="Auth" asp-action="Login" method="POST">
+            <img src="logo.jpg" class="text-center mx-auto mt-4 mb-4" alt="KKTCELL Logo" height="72">
             <h3 style="font-weight: normal;">Please Login</h3>
 
-            <input asp-for="UserName" type="email"  class="form-control" placeholder="Email Address" required autofocus/>
+            <input asp-for="UserName" type="email"  class="form-control my-2" placeholder="Email Address" required autofocus/>
 
-            <input asp-for="Password" type="password"  class="form-control" placeholder="Password" required autofocus/>
+            <input asp-for="Password" type="password"  class="form-control my-2" placeholder="Password" required autofocus/>
+
+            <div class="my-2">
+                <p class="text-danger">@ViewBag.error</p>
+            </div>
   
             <div class="mt-2">
                 <button type="submit" class="btn btn-lg btn-primary">Login</button>
