@@ -1,0 +1,22 @@
+h1 { 
+    font-weight:lighter; 
+}
+#hello {
+    background-image: url("logo.jpg");
+    
+}
+.detail {
+    color:cornflowerblue;
+}
+.card {
+    display:inline-block;
+    width: fit-content;
+block-size: fit-content;
+}
+#hello1 {
+    color: coral;
+}
+.card{
+  block-size: auto;
+
+}
