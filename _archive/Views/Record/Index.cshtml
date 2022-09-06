@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<RecordsModel>
+
 @{
     ViewData["Title"] = "Records";
 
@@ -12,6 +13,20 @@
         pageNo = pagination.CurrentPage;
     }
 }
+    
+<div class="d-flex my-4 justify-content-between">
+    <h3 class=" small text-muted">Welcome back,@Context.Session.GetString("username")!</h3>
+<h3 class="small text-muted">Current Role:
+    @if (ViewBag.IsCurrentUserAdmin)
+        {
+          <span class="fw-bold">ADMIN</span> 
+        } else{
+         <span class="fw-bold">DEVELOPER</span> 
+        }
+   </h3>
+</div>
+
+
 
 <h3>Archive Records</h3>
 <hr class="my-3" />
@@ -43,6 +58,7 @@
           <th>@Html.ActionLink("Title","Index","Record",new {sort_Order = "Title"},null)</th>
           <th>Release Date</th>
           <th>Status</th>
+          <th>Actions</th>
         
     </tr>
   </thead>
@@ -53,11 +69,21 @@
             <td>@record.ArchiveID</td>
             <td>@record.ChangesetID</td>
             <td>@record.BPMNo</td>
-            <td>@record.UserID</td>
+            <td>@(record.User.UserName == ViewBag.CurrentUser.UserName ? "You" : record.User.UserName)</td>
             <td>@(record.Title.Length > 10  ? record.Title.Substring(0,10) + "..." : record.Title)</td>
-            <td>@record.ReleaseTime</td>
+            <td>@record.ReleaseTime.ToString("MM/dd/yyyy")</td>
             <td>@(record.Status.Length > 10  ? record.Status.Substring(0,10) + "..." : record.Status)</td>
-            <td><a class="nav-link" asp-route-id="@record.ArchiveID" asp-action="Details" asp-controller="Record">Details</a></td>
+            <td>
+                <a class="nav-link" asp-route-id="@record.ArchiveID" asp-action="Details" asp-controller="Record">Details</a>
+                    @if(ViewBag.IsCurrentUserAdmin)
+                    {
+                         <a class="nav-link text-danger" asp-route-id="@record.ArchiveID" onclick="return confirm('Are you sure to delete this record?')" asp-action="Delete" asp-controller="Record">Remove</a>
+                    }
+                    @if(ViewBag.CurrentUser.Id == record.UserID || ViewBag.IsCurrentUserAdmin)
+                    {
+                         <a class="nav-link " asp-route-id="@record.ArchiveID" asp-action="Edit" asp-controller="Record">Edit</a>
+                    }
+                </td>
         </tr>
         }
   </tbody>
@@ -80,6 +106,6 @@
     }
 </div>
 
-<h3>Welcome back,@Context.Session.GetString("username")</h3>
+
 
  

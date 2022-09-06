@@ -1,5 +1,6 @@
 ﻿using _archive.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore; //required for "Include" chain function.
 
 namespace _archive.Controllers
 {
@@ -18,13 +19,14 @@ namespace _archive.Controllers
 
         public IActionResult Index(string sort_Order,string key_search, string Filter_Value,int Page_No,int pg =1)
         {
+            var sessionString = HttpContext.Session.GetString("username");
 
-            if (HttpContext.Session.GetString("username") == null) return RedirectToAction("Login", "Auth", null);
+            if (sessionString == null) return RedirectToAction("Login", "Auth", null);
 
             ViewBag.ArchiveID = String.IsNullOrEmpty(sort_Order) ? "ArchiveID" : "";
             ViewBag.ChangesetID = String.IsNullOrEmpty(sort_Order) ? "ChangesetID" : "";
             ViewBag.BPMNo = String.IsNullOrEmpty(sort_Order) ? "BPMNo" : "";
-            ViewBag.UserID = String.IsNullOrEmpty(sort_Order) ? "UserID" : "";
+            ViewBag.UserName = String.IsNullOrEmpty(sort_Order) ? "UserName" : "";
             ViewBag.Title = String.IsNullOrEmpty(sort_Order) ? "Title" : "";
 
 
@@ -39,12 +41,12 @@ namespace _archive.Controllers
 
 
 
-            IEnumerable<RecordsModel> records = _db.RecordsModel.ToList();
+            IEnumerable<RecordsModel> records = _db.RecordsModel.Include(records => records.User).ToList();
 
 
             if (!String.IsNullOrEmpty(key_search))
             {
-                records = records.Where(record => record.BPMNo.ToString().ToLower().Contains(key_search.ToLower()) || record.ArchiveID.ToString().ToLower().Contains(key_search.ToLower()) || record.Title.ToLower().Contains(key_search.ToLower())
+                records = records.Where(record => record.BPMNo.ToString().ToLower().Contains(key_search.ToLower()) || record.User.UserName.ToLower().Contains(key_search.ToLower()) || record.ArchiveID.ToString().ToLower().Contains(key_search.ToLower()) || record.Title.ToLower().Contains(key_search.ToLower())
                 || record.Status.ToLower().Contains(key_search.ToLower()) || record.ChangesetID.ToString().ToLower().Contains(key_search.ToLower()));
             }
 
@@ -59,8 +61,8 @@ namespace _archive.Controllers
                 case "BPMNo":
                     records = records.OrderByDescending(record => record.BPMNo);
                     break;
-                case "UserID":
-                    records = records.OrderByDescending(record => record.UserID);
+                case "UserName":
+                    records = records.OrderByDescending(record => record.User.UserName);
                     break;
                 case "Title":
                     records = records.OrderByDescending(record => record.Title);
@@ -90,8 +92,12 @@ namespace _archive.Controllers
             */
 
             var data = records.Skip(recSkip).Take(pagination.PageSize).ToList();
+            var currentUser = _db.UsersModel.FirstOrDefault(user => user.UserName == sessionString);
+            var isCurrentUserAdmin = currentUser.Role == Data.Enums.UsersRoles.Admin;
 
             this.ViewBag.Pagination = pagination;
+            this.ViewBag.IsCurrentUserAdmin = isCurrentUserAdmin;
+            this.ViewBag.CurrentUser = currentUser;
 
             return View(data);
            
@@ -105,8 +111,19 @@ namespace _archive.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var record = _db.RecordsModel.Find(id);
+
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+
+            if (currentUser == null) return RedirectToAction("Login", "Auth", null);
+
+            IEnumerable<RecordsModel> records = _db.RecordsModel.Include(records => records.User);
+
+            var record = records.FirstOrDefault(r => r.ArchiveID == id);
+
+           
             if (record == null) return NotFound();
+
+            this.ViewBag.CurrentUser = currentUser;
 
             return View(record);
         }
@@ -114,41 +131,122 @@ namespace _archive.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(RecordsModel record)
+        public async Task<IActionResult> Create([Bind]RecordsModel record)
         {
+           
 
-            if (ModelState.IsValid)
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+
+            if (currentUser == null) return RedirectToAction("Login", "Auth", null);
+
+         
+            var newRecord = new RecordsModel()
             {
-                _db.RecordsModel.Add(record);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(record); 
+                ChangesetID = record.ChangesetID,
+                Title = record.Title,
+                UpdateDetails = record.UpdateDetails,
+                Analysis = record.Analysis,
+                BPMNo = record.BPMNo,
+                TestResults = record.TestResults,
+                StartTime = record.StartTime,
+                EndTime = record.EndTime,
+                ReleaseTime = record.ReleaseTime,
+                Status = record.Status,
+                RecordsCategory = record.RecordsCategory,
+                User = currentUser,
+                UserID = currentUser.Id
+            };
+
+            _db.RecordsModel.Add(newRecord);
+            await _db.SaveChangesAsync();
+          
+
+            var message = string.Join(" | ", ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage));
+
+            this.ViewBag.ErrorMessage = message;
+           
+
+
+
+            return RedirectToAction("Index");
+
+            //return View(record); 
+        }
+
+
+        public IActionResult Edit(int id)
+        {
+            var record = _db.RecordsModel.Find(id);
+            if (record == null) return NotFound();
+            return View(record);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(RecordsModel record)
+        public async Task<IActionResult> Edit(int id,[Bind]RecordsModel record)
+
         {
-            if (ModelState.IsValid)
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+
+            if (currentUser == null) return RedirectToAction("Login", "Auth", null);
+
+         
+
+            var updatedRecord = new RecordsModel()
             {
-                _db.RecordsModel.Update(record);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(record);
+                ArchiveID = id,
+                ChangesetID = record.ChangesetID,
+                Title = record.Title,
+                UpdateDetails = record.UpdateDetails,
+                Analysis = record.Analysis,
+                BPMNo = record.BPMNo,
+                TestResults = record.TestResults,
+                StartTime = record.StartTime,
+                EndTime = record.EndTime,
+                ReleaseTime = record.ReleaseTime,
+                Status = record.Status,
+                RecordsCategory = record.RecordsCategory,
+                User = currentUser,
+                UserID = currentUser.Id
+
+            };
+
+        
+
+                _db.RecordsModel.Update(updatedRecord);
+                await _db.SaveChangesAsync();
+               
+      
+
+         
+
+            var message = string.Join(" | ", ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage));
+
+
+            this.ViewBag.ErrorMessage = message;
+
+            return RedirectToAction("Index");
 
         }
 
-        [HttpDelete]
+   
         public IActionResult Delete(int id)
         {
-           
-            var record = _db.RecordsModel.Find(id);
-            if (record == null) return NotFound();
-            _db.RecordsModel.Remove(record);
-            _db.SaveChanges();
+            var username = HttpContext.Session.GetString("username");
+            var user = _db.UsersModel.SingleOrDefault(user=>user.UserName == username); 
+            if(user.Role == Data.Enums.UsersRoles.Admin)
+            {
+                var record = _db.RecordsModel.Find(id);
+                if (record == null) return NotFound();
+                _db.RecordsModel.Remove(record);
+                _db.SaveChanges();
+            }
+          
             return RedirectToAction("Index");
         }
     }

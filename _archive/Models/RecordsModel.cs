@@ -15,29 +15,41 @@ namespace _archive.Models
         [DisplayName("Changeset ID")]
         public int ChangesetID { get;set;}
 
-       
+        [Required]
         public string Title { get; set; }
 
      
+        [Required]
         [DisplayName("Update Details")]
         public string UpdateDetails { get;set;}
       
+        [Required]
         public string Analysis { get;set;}
 
+        [Required]
         public int BPMNo { get; set; }
 
-        
+
+        [Required]
         [DisplayName("Test Results")]
         public string TestResults { get;set;}
-        
+
+
+        [Required]
 
         [DisplayName("Start Time")]
         public DateTime StartTime { get;set;}
+
+        [Required]
         [DisplayName("End Time")]
         public DateTime EndTime { get;set;}
+
+        [Required]
         [DisplayName("Release Time")]
         public DateTime ReleaseTime { get;set;}
-       
+
+
+        [Required]
         public string Status { get;set;}
 
         [DisplayName("Category")]

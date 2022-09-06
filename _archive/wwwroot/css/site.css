@@ -4,6 +4,10 @@ html {
     font-size: 14px;
 }
 
+.login-block{
+    height:calc(100vh - 350px);
+}
+
 .turkcell-bg-color-blue, .search-btn {
     background-color: #2855AC !important;
     color: #fff;
@@ -41,6 +45,8 @@ html {
   position: relative;
   min-height: 100%;
 }
+
+
 
 body {
   margin-bottom: 60px;
@@ -101,3 +107,33 @@ table {
 }
 
 
+
+
+h1 {
+    font-weight: lighter;
+}
+
+/*#hello {
+    background-image: url("https://ffo3gv1cf3ir.merlincdn.net/static_lib/assetsv2/common/images/content/turkcell-logo.png?1773534948009");
+    background-repeat:no-repeat;
+    background-position:right bottom;
+
+}*/
+
+.detail {
+    color: cornflowerblue;
+}
+
+.card {
+    display: inline-block;
+    width: fit-content;
+    block-size: fit-content;
+}
+
+#hello1 {
+    color: coral;
+}
+
+.card {
+    block-size: auto;
+}

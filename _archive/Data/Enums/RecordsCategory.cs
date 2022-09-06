@@ -2,7 +2,7 @@
 {
    public enum RecordsCategory
     {
-        KOTLIN = 1,
-        FLUTTER = 2,
+        KOTLIN  = 0,
+        FLUTTER = 1,
     }
 }

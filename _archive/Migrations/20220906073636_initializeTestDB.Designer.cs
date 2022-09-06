@@ -11,7 +11,7 @@ using _archive.Models;
 namespace _archive.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220829234749_initializeTestDB")]
+    [Migration("20220906073636_initializeTestDB")]
     partial class initializeTestDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

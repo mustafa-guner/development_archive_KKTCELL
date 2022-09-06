@@ -3,10 +3,10 @@
 
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h3>Creating New Archive</h3>
+<h3>Editing  Archive</h3>
 
 <hr class="my-3" />
 
@@ -32,18 +32,20 @@
 }
 
 
-<form class="form mt-2" method="POST" >
+<form class="form mt-2" method="POST" asp-controller="Record" asp-action="Edit" >
     <div>
- 
+     <input type="hidden"value="@Model.ArchiveID" class="form-control" />  
+     <input type="hidden"value="@Model.User" class="form-control"  />
+     <input type="hidden"value="@Model.UserID" class="form-control"  />
         <div class="row">
             <div class="col-4"> 
                 <label asp-for="Title"></label><span class="text-danger">*</span>
-                <input asp-for="Title" value="Deneme Title" placeholder="Enter title" class="form-control"/>
+                <input asp-for="Title" value="@Model.Title" placeholder="Enter title" class="form-control"/>
                  <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="col-4">
                 <label asp-for="RecordsCategory">Select Category:<span class="text-danger">*</span> </label><br />
-                <select asp-for="RecordsCategory" class="form-control" asp-items="Html.GetEnumSelectList<RecordsCategory>()"></select><br />
+                <select asp-for="RecordsCategory" selected="@Model.RecordsCategory" class="form-control" asp-items="Html.GetEnumSelectList<RecordsCategory>()"></select><br />
                 <span asp-validation-for="RecordsCategory" class="text-danger" />
             </div>
            
@@ -51,18 +53,18 @@
           <div class="row my-2">
               <div class="col-4">
                   <label asp-for="ChangesetID"></label><span class="text-danger">*</span>
-                  <input asp-for="ChangesetID" value="412312" placeholder=""  class="form-control" type="number">
+                  <input asp-for="ChangesetID" value="@Model.ChangesetID" placeholder=""  class="form-control" type="number">
                     <span asp-validation-for="ChangesetID" class="text-danger"></span>
             </div>
              <div class="col-4">
                    <label asp-for="Status"></label> <span class="text-danger">*</span>
-                   <input asp-for="Status" value="Failed" placeholder="" type="text" class="form-control">
+                   <input asp-for="Status"  value="@Model.Status" placeholder="" type="text" class="form-control">
                      <span asp-validation-for="Status" class="text-danger"></span>
               </div>
             
                <div class="col-4">
                 <label asp-for="BPMNo"></label><span class="text-danger">*</span>
-                <input asp-for="BPMNo" value="14444" type="number" class="form-control"/> 
+                <input asp-for="BPMNo" value="@Model.BPMNo" type="number" class="form-control"/> 
                   <span asp-validation-for="BPMNo" class="text-danger"></span>
             </div>  
           </div>
@@ -82,26 +84,26 @@
 
             <div class="my-2">
                 <label asp-for="Analysis"></label><span class="text-danger">*</span>
-                <input asp-for="Analysis" value="Analysis of the record here" class="form-control"/>
+                <input asp-for="Analysis" value="@Model.Analysis" class="form-control"/>
                   <span asp-validation-for="Analysis" class="text-danger"></span>
             </div>
 
             <div class="row my-2">
                 <div class="col-4">
                     <label asp-for="StartTime"></label><span class="text-danger">*</span>
-                    <input asp-for="StartTime" placeholder="" type="date"  class="form-control" >
+                    <input asp-for="StartTime" placeholder="" type="date" value="@Model.StartTime"  class="form-control" >
                       <span asp-validation-for="StartTime" class="text-danger"></span>
                 </div>
 
                  <div class="col-4">
                     <label asp-for="EndTime"></label><span class="text-danger">*</span>
-                    <input asp-for="EndTime" placeholder="" type="date" class="form-control">
+                    <input asp-for="EndTime" placeholder=""  value="@Model.EndTime" type="date" class="form-control">
                       <span asp-validation-for="EndTime" class="text-danger"></span>
                  </div>
 
                  <div class="col-4">
                     <label asp-for="ReleaseTime"></label><span class="text-danger">*</span>
-                    <input asp-for="ReleaseTime" placeholder="" type="date" class="form-control">
+                    <input asp-for="ReleaseTime" placeholder=""  value="@Model.ReleaseTime" type="date" class="form-control">
                       <span asp-validation-for="ReleaseTime" class="text-danger"></span>
                  </div>
             </div>
@@ -111,7 +113,7 @@
         </div>
         <div>
             <div class="d-flex">
-                <button type="submit" class="btn btn-primary mr-1">Create</button>
+                <button type="submit" class="btn btn-primary mr-1">Edit</button>
             </div>
         </div>
     </form>  

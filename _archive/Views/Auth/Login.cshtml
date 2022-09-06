@@ -6,21 +6,43 @@
 }
 
 
-<div class="ilk">
-        <form style="max-width: 300px;margin: auto;" asp-controller="Auth" asp-action="Login" method="POST">
-            <img src="logo.jpg" class="text-center mx-auto mt-4 mb-4" alt="KKTCELL Logo" height="72">
-            <h3 style="font-weight: normal;">Please Login</h3>
+<div class=" login-block d-flex flex-column align-items-center ">
+        <form class="w-25" margin: auto;" class="text-center" asp-controller="Auth" asp-action="Login" method="POST">
+            <img src="logo.jpg" class="text-center mx-auto d-flex justify-content-center mt-4 mb-4" alt="KKTCELL Logo" height="72">
+            <h3 style="font-weight: normal;">ArchiveCell Login</h3>
 
-            <input asp-for="UserName" type="email"  class="form-control my-2" placeholder="Email Address" required autofocus/>
+            <input asp-for="Email" type="email" value="test1@outlook.com"   class="form-control my-2" placeholder="Email Address" required autofocus/>
 
-            <input asp-for="Password" type="password"  class="form-control my-2" placeholder="Password" required autofocus/>
-
-            <div class="my-2">
-                <p class="text-danger">@ViewBag.error</p>
+            <input asp-for="Password" type="password" value="test1"   class="form-control my-2" placeholder="Password" required autofocus/>
+       
+            
+            
+            @if(ViewBag.error != null)
+        {
+            <div id="loginError" class="my-4 alert alert-danger">
+               @ViewBag.error
             </div>
+
+             }
+         
+            
   
-            <div class="mt-2">
-                <button type="submit" class="btn btn-lg btn-primary">Login</button>
+            <div class="mt-2 w-100">
+                <button type="submit" class="btn btn-sm btn-primary w-100">Login</button>
             </div>
         </form>
     </div>
+
+
+
+       <script>
+                const isError = @(ViewBag.error != null ? "true" : "false");
+                const loginError = document.querySelector("#loginError");
+                if(isError){
+                     setTimeout(()=>{
+                        loginError.remove();
+                       
+                    },3000);
+                    }
+            </script>
+               
