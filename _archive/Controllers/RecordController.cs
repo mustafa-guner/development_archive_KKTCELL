@@ -1,6 +1,7 @@
 ﻿using _archive.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore; //required for "Include" chain function.
+using Newtonsoft.Json.Linq;
 
 namespace _archive.Controllers
 {
@@ -19,9 +20,15 @@ namespace _archive.Controllers
 
         public IActionResult Index(string sort_Order,string key_search, string Filter_Value,int Page_No,int pg =1)
         {
-            var sessionString = HttpContext.Session.GetString("username");
+            var sessionString = HttpContext.Session.GetString("user");
+    
 
             if (sessionString == null) return RedirectToAction("Login", "Auth", null);
+
+            var sessionUser = JObject.Parse(sessionString)!;
+           
+       
+
 
             ViewBag.ArchiveID = String.IsNullOrEmpty(sort_Order) ? "ArchiveID" : "";
             ViewBag.ChangesetID = String.IsNullOrEmpty(sort_Order) ? "ChangesetID" : "";
@@ -92,7 +99,7 @@ namespace _archive.Controllers
             */
 
             var data = records.Skip(recSkip).Take(pagination.PageSize).ToList();
-            var currentUser = _db.UsersModel.FirstOrDefault(user => user.UserName == sessionString);
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == sessionUser["username"].ToString() && user.Id.ToString() == sessionUser["id"].ToString());
             var isCurrentUserAdmin = currentUser.Role == Data.Enums.UsersRoles.Admin;
 
             this.ViewBag.Pagination = pagination;
@@ -112,7 +119,11 @@ namespace _archive.Controllers
         public IActionResult Details(int id)
         {
 
-            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+            var sessionString = HttpContext.Session.GetString("user");
+
+            var sessionUser = JObject.Parse(sessionString);
+
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == sessionUser["username"].ToString() && user.Id.ToString() == sessionUser["id"].ToString());
 
             if (currentUser == null) return RedirectToAction("Login", "Auth", null);
 
@@ -133,9 +144,11 @@ namespace _archive.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind]RecordsModel record)
         {
-           
+            var sessionString = HttpContext.Session.GetString("user");
 
-            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+            var sessionUser = JObject.Parse(sessionString);
+
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == sessionUser["username"].ToString() && user.Id.ToString() == sessionUser["id"].ToString());
 
             if (currentUser == null) return RedirectToAction("Login", "Auth", null);
 
@@ -189,7 +202,12 @@ namespace _archive.Controllers
         public async Task<IActionResult> Edit(int id,[Bind]RecordsModel record)
 
         {
-            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == HttpContext.Session.GetString("username"));
+
+            var sessionString = HttpContext.Session.GetString("user");
+
+            var sessionUser = JObject.Parse(sessionString);
+
+            var currentUser = _db.UsersModel.SingleOrDefault(user => user.UserName == sessionUser["username"].ToString() && user.Id.ToString() == sessionUser["id"].ToString());
 
             if (currentUser == null) return RedirectToAction("Login", "Auth", null);
 
@@ -218,10 +236,7 @@ namespace _archive.Controllers
 
                 _db.RecordsModel.Update(updatedRecord);
                 await _db.SaveChangesAsync();
-               
-      
-
-         
+             
 
             var message = string.Join(" | ", ModelState.Values
             .SelectMany(v => v.Errors)
@@ -233,19 +248,29 @@ namespace _archive.Controllers
             return RedirectToAction("Index");
 
         }
-
-   
-        public IActionResult Delete(int id)
+            
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
         {
-            var username = HttpContext.Session.GetString("username");
-            var user = _db.UsersModel.SingleOrDefault(user=>user.UserName == username); 
-            if(user.Role == Data.Enums.UsersRoles.Admin)
+            var sessionString = HttpContext.Session.GetString("user");
+
+            if (sessionString == null) return RedirectToAction("Login", "Auth", null);
+
+            var sessionUser = JObject.Parse(sessionString);
+
+            //var user = _db.UsersModel.SingleOrDefault(user=>user.UserName == sessionUser["username"].ToString()); 
+
+     
+        
+            if (sessionUser["role"].ToString() == Data.Enums.UsersRoles.Admin.ToString())
             {
-                var record = _db.RecordsModel.Find(id);
+                var record = await _db.RecordsModel.FindAsync(id);
+              
                 if (record == null) return NotFound();
                 _db.RecordsModel.Remove(record);
-                _db.SaveChanges();
-            }
+                await _db.SaveChangesAsync();
+            }   
           
             return RedirectToAction("Index");
         }

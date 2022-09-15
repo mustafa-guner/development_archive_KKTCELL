@@ -5,12 +5,17 @@
     ViewData["Title"] = "Login";
 }
 
-
-<div class=" login-block d-flex flex-column align-items-center ">
-        <form class="w-25" margin: auto;" class="text-center" asp-controller="Auth" asp-action="Login" method="POST">
-            <img src="logo.jpg" class="text-center mx-auto d-flex justify-content-center mt-4 mb-4" alt="KKTCELL Logo" height="72">
-            <h3 style="font-weight: normal;">ArchiveCell Login</h3>
-
+<div class="row login-row">
+    <div class="col-4 d-flex flex-column align-items-center justify-content-center">
+          <form class="login-form p-4  w-75 mx-auto text-center" asp-controller="Auth" asp-action="Login" method="POST">
+    
+             <h3  style="font-weight: normal;" class="navbar-brand text-white d-flex justify-content-center align-self-center align-items-center">
+                      
+                        <div class="px-2">
+                            <span class="turkcell-yellow ">Archive</span>
+                            <span class="ml-0 px-0 fw-bold text-white archive-logo-text">Cell</span>
+                        </div>
+                    </h3>
             <input asp-for="Email" type="email" value="test1@outlook.com"   class="form-control my-2" placeholder="Email Address" required autofocus/>
 
             <input asp-for="Password" type="password" value="test1"   class="form-control my-2" placeholder="Password" required autofocus/>
@@ -32,6 +37,11 @@
             </div>
         </form>
     </div>
+    <div class="col-8 login-block bg-dark d-flex flex-column align-items-center "><div class="overlay"></div></div>
+</div>
+
+      
+
 
 
 

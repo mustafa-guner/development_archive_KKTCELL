@@ -1,0 +1,81 @@
+﻿@using _archive.Data.Enums
+@model UsersModel;
+
+
+@{
+    ViewData["Title"] = "EditUser";
+}
+
+<div class="container">
+    <h3>Editing  User</h3>
+
+<hr class="my-3" />
+
+<div class="d-flex justify-content-start"><a class="nav-link px-0" asp-action="Users" asp-controller="Admin">Back</a></div>
+
+@if(ViewBag.ErrorMessage != null)
+{
+    <div id="createError" class="alert alert-danger my-4">
+    @ViewBag.ErrorMessage
+</div>
+
+    <script>
+         const isError = @(ViewBag.ErrorMessage != null ? "true" : "false");
+                const createError = document.querySelector("#createError");
+                if(isError){
+                     setTimeout(()=>{
+                        createError.remove();
+                       
+                    },3000);
+                    }
+    </script>
+
+}
+
+
+<form class="form mt-2" method="POST" asp-action="EditUser" asp-controller="Admin" >
+    <div>
+ 
+        <div class="row">
+            <div class="col-4"> 
+                <label asp-for="UserName"></label><span class="text-danger">*</span>
+                <input asp-for="UserName" value="@Model.UserName" placeholder="Enter Username" class="form-control"/>
+                 <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+               <div class="col-4"> 
+                <label asp-for="Email"></label><span class="text-danger">*</span>
+                <input asp-for="Email" type="email" value="@Model.Email" placeholder="Enter Email" class="form-control"/>
+                 <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row my-2">
+               <div class="col-4">
+                <label asp-for="Role">Select Role:<span class="text-danger">*</span> </label><br />
+                <select asp-for="Role" class="form-control" asp-items="Html.GetEnumSelectList<UsersRoles>()"></select><br />
+                <span asp-validation-for="Role" class="text-danger" />
+            </div>
+             <div class="col-4"> 
+                <label asp-for="Password"></label><span class="text-danger">*</span>
+                <input asp-for="Password" type="password" value="@Model.Password" placeholder="Enter Password" class="form-control"/>
+                 <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+      
+        </div>
+        <div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-primary mr-1">Update</button>
+            </div>
+        </div>
+    </form>  
+</div>
+
+
+
+
+
+    @section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

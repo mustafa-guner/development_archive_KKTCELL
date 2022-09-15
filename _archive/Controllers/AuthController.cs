@@ -1,5 +1,6 @@
 ﻿using _archive.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace _archive.Controllers
 {
@@ -16,7 +17,7 @@ namespace _archive.Controllers
 
         public IActionResult Login()
         {
-            if(HttpContext.Session.GetString("username") != null)
+            if(HttpContext.Session.GetString("user") != null)
             {
                 return RedirectToAction("Index", "Record", null);
             }
@@ -43,8 +44,8 @@ namespace _archive.Controllers
                     this.ViewBag.error = "Password is not correct. Please try again or get in touch with the system admin.";
                     return View("Login");
                 }
-                var username = user.UserName;
-                HttpContext.Session.SetString("username", username);
+
+                HttpContext.Session.SetString("user", JsonSerializer.Serialize(new {username = user.UserName,role=user.Role == Data.Enums.UsersRoles.Admin ?"Admin" :"Developer",id = user.Id }));
                 return RedirectToAction("Index", "Record", null);
             }
             else
@@ -57,7 +58,7 @@ namespace _archive.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.Remove("username");
+            HttpContext.Session.Remove("user");
             return RedirectToAction("Login","Auth",null);
         }
     }

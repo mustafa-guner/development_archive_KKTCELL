@@ -5,7 +5,8 @@
     ViewData["Title"] = "Record";
 }
 
-<a asp-action="Index" asp-controller="Record">Back</a>
+<div class="container">
+    <a asp-action="Index" asp-controller="Record">Back</a>
  <h3 class="my-2">@Model.Title</h3>
     <hr>
     <h3 class="detail">Archive Details</h3>
@@ -52,15 +53,16 @@
         </div>
       </div>
     </div>
-    <div class="my-4">
+     <div class="my-4 py-3">
        <h3 class="detail">Anaylsis Details</h3>
        <p>@Model.Analysis</p>
      </div>
-    <div class="my-4">
+     <div class="my-4 py-3">
       <h3 class="detail">Update Details</h3>
       <p>@Model.UpdateDetails</p>
     </div>
-    <div class="my-4">
+    <div class="my-4 py-3">
     <h3 class="detail">Test Results</h3>
     <p>@Model.TestResults</p>
     </div>
+</div>

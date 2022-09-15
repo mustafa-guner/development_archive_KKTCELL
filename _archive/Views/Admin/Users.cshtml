@@ -1,0 +1,129 @@
+﻿@model IEnumerable<UsersModel>
+
+@{
+    ViewData["Title"] = "Users";
+
+    Pagination pagination = new Pagination();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pagination != null)
+    {
+        pagination = ViewBag.Pagination;
+        pageNo = pagination.CurrentPage;
+    }
+}
+
+<div class="container">
+    <div class="d-flex my-4 justify-content-between">
+        <h3 class=" small text-muted">Welcome back,@ViewBag.currentUserName !</h3>
+        <h3 class="small text-muted">
+            Current Role:
+            @if (ViewBag.IsCurrentUserAdmin)
+            {
+                <span class="fw-bold">ADMIN</span>
+            }
+            else
+            {
+                <span class="fw-bold">DEVELOPER</span>
+            }
+        </h3>
+    </div>
+
+
+
+    <h3>Users</h3>
+    <hr class="my-3" />
+
+    <div class="d-flex justify-content-between my-2">
+        <div>
+            <a class="nav-link ml-0 px-0" asp-controller="Admin" asp-action="CreateUser">Create New User</a>
+        </div>
+        <div>
+            @using (Html.BeginForm())
+            {
+                <div class="d-flex align-items-center">
+                    @Html.TextBox("key_search",ViewBag.FilterValue as string,new {@class="form-control",@placeholder="Search by.."})
+                    <button class="btn search-btn " type="submit">Search</button>
+                </div>
+            }
+
+        </div>
+    </div>
+
+
+    <table class="table">
+        <thead class="thead-turkcell">
+            <tr>
+                <th>@Html.ActionLink("User ID","Users","Admin",new {sort_Order = "Id"},null)</th>
+                <th>@Html.ActionLink("UserName","Users","Admin",new {sort_Order = "UserName"},null)</th>
+                <th>@Html.ActionLink("Email","Users","Admin",new {sort_Order = "Email"},null)</th>
+                <th>@Html.ActionLink("Role","Users","Admin",new {sort_Order = "Email"},null)</th>
+                <th>Action(s)</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td> <a class="nav-link" asp-route-id="@user.Id" asp-action="Profile" asp-controller="Profile">@user.Id</a></td>
+                    <td>@(ViewBag.CurrentUserID != user.Id ? user.UserName : user.UserName + "(you)")</td>
+                    <td>@user.Email</td>
+                    <td>@(user.Role)</td>
+                    <td>
+                        @if (ViewBag.CurrentUserID != user.Id)
+                        {
+                            <form class="d-inline" asp-action="DeleteUser" method="POST" asp-controller="Admin" asp-route-id="@user.Id">
+                                <button type="button" class="text-danger remove-btn" onclick="return removeModal(this)">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        }
+                        
+
+                        <a class="text-primary" asp-route-id="@user.Id" asp-action="EditUser" asp-controller="Admin">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </a>
+                    </td>
+
+                    @* <td>@record.ReleaseTime.ToString("MM/dd/yyyy")</td>*@
+
+                    @*    <td>
+                        <a class="nav-link" asp-route-id="@record.ArchiveID" asp-action="Details" asp-controller="Record">Details</a>
+                        @if(ViewBag.IsCurrentUserAdmin)
+                        {
+                        <a class="nav-link text-danger" asp-route-id="@record.ArchiveID" onclick="return confirm('Are you sure to delete this record?')" asp-action="Delete" asp-controller="Record">Remove</a>
+                        }
+                        @if(ViewBag.CurrentUser.Id == record.UserID || ViewBag.IsCurrentUserAdmin)
+                        {
+                        <a class="nav-link " asp-route-id="@record.ArchiveID" asp-action="Edit" asp-controller="Record">Edit</a>
+                        }
+                        </td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="container">
+        @if (pagination.TotalPages > 1)
+        {
+            <ul class="pagination justify-content-end">
+                @for (var pge = pagination.StartPage; pge <= pagination.EndPage; pge++)
+                {
+                    <li class="page-item @(pge == pagination.CurrentPage?"active" :"")">
+                        <a class="page-link" asp-controller="Admin" asp-action="Users" asp-route-pg="@pge">
+                            @pge
+                        </a>
+                    </li>
+
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+
+
+
+

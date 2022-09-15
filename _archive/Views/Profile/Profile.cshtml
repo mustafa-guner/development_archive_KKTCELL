@@ -1,0 +1,69 @@
+﻿@model UsersModel
+
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+<div class="container">
+    <a asp-action="Users" asp-controller="Admin">Back</a>
+
+<div class="d-flex align-items-center"><h1 class="my-2">@(ViewBag.CurrentUser.Id == @Model.Id ? "My" : @Model.UserName + "'s") Profile</h1> </div>
+<hr class="my-3"/>
+<div class="row">
+    <div class="col-2">
+      <img class="seloUser" src="http://localhost:5161/images/seloCan.png"  style="background-color:#E4E6E7;" />
+    </div>
+    <div class="col-9">
+  
+        <div class="details my-2">
+               <h5>Details:</h5>
+               <ul>
+                   <li class="my-2">Username: @Model.UserName</li>
+                   <li class="my-2">Email: @Model.Email</li>
+                   <li class="my-2">Role: <span class="fw-bold text-muted">@Model.Role</span></li>
+                   <li class="my-2">Total Records Created: <span class="fw-bold text-muted">@ViewBag.RecordsCount</span></li>
+               </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h3 class="my-3 ">Shared Records</h3>
+   <table class="table">
+  <thead>
+    <tr>
+          <th>@Html.ActionLink("Archive ID","Index","Record",new {sort_Order = "AchiveID"},null)</th>
+          <th>@Html.ActionLink("Changeset ID","Index","Record",new {sort_Order = "ChangesetID"},null)</th>
+          <th>@Html.ActionLink("BPM NO","Index","Record",new {sort_Order = "BPMNo"},null)</th>
+          <th>@Html.ActionLink("User","Index","Record",new {sort_Order = "UserID"},null)</th>
+          <th>@Html.ActionLink("Title","Index","Record",new {sort_Order = "Title"},null)</th>
+          <th>Release Date</th>
+          <th>Status</th>
+          
+    
+    </tr>
+  </thead>
+  <tbody>
+                @foreach(var record in ViewBag.Records)
+                {
+                    <tr style="@(ViewBag.CurrentUser.Id == record.UserID  ? "background-color:rgba(292,201,16,.1);" : "")">
+
+
+                    <td><a class="nav-link" asp-route-id="@record.ArchiveID" asp-action="Details" asp-controller="Record">@record.ArchiveID</a></td>
+                    <td>@record.ChangesetID</td>
+                    <td>@record.BPMNo</td>
+                    <td>@(record.User.UserName == ViewBag.CurrentUser.UserName ? "You" : record.User.UserName)</td>
+                    <td>@(record.Title.Length > 10  ? record.Title.Substring(0,10) + "..." : record.Title)</td>
+                    <td>@record.ReleaseTime.ToString("MM/dd/yyyy")</td>
+                    <td>@(record.Status.Length > 10  ? record.Status.Substring(0,10) + "..." : record.Status)</td>
+                    
+
+                </tr>
+                }
+
+  </tbody>
+</table>
+</div>
+</div>

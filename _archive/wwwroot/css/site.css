@@ -1,12 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Qwitcher+Grypen&display=swap');
 
+
+
 html {
     font-size: 14px;
+    overflow-x: hidden;
 }
 
-.login-block{
-    height:calc(100vh - 350px);
+.seloUser{
+    width:190px;
+    height:210px;
+    border-radius:10px;
+    display:inline-block;
 }
+
+.border-none {
+    border: none !important;
+    object-fit: cover;
+    border-radius: 100%;
+    overflow: hidden;
+    width: 200px !important;
+    height: 200px !important;
+}
+
+.login-row {
+    background: rgb(0,100,190);
+    background: radial-gradient(circle, rgba(0,100,190,1) 0%, rgba(59,120,180,1) 0%, rgba(108,170,232,1) 100%, rgba(59,120,180,1) 100%);
+    
+}
+
+.login-form {
+    background-color: #3B78B4;
+    border-radius: 10px;
+    transform: translateY(0%);
+    backdrop-filter: blur(10px);
+}
+.login-form h3{
+    font-size:2rem;
+}
+
+    .login-form h3 span.archive-logo-text{
+        font-size:3rem !important;
+    }
+
+.login-block {
+    height: 100vh;
+    background-image: url("https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/58828153318083.592ff7ddf31da.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(3px);
+    clip-path: polygon(39% 0, 100% 0%, 100% 100%, 0 100%);
+}
+
+        .login-block .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,.3);
+            bottom: 0;
+        }
 
 .turkcell-bg-color-blue, .search-btn {
     background-color: #2855AC !important;
@@ -46,14 +99,24 @@ html {
   min-height: 100%;
 }
 
-
-
-body {
-  margin-bottom: 60px;
+.swal2-styled.swal2-confirm {
+    background-color:rgb(0,100,190) !important;
+    outline:none !important;
+    border:none !important;
 }
 
+.swal2-styled.swal2-confirm:focus {
+   
+    outline: none !important;
+   
+}
 
-table th {
+    /*body {
+  margin-bottom: 60px;
+}*/
+
+
+    table th {
     font-size: 13px !important;
     background-color: #FCB510 !important;
     color: #fff;
@@ -70,7 +133,7 @@ table {
 
 table td {
     width: 33%;
-    border: 1px solid rgba(51, 51, 51, 0.168);
+  /*  border: 1px solid rgba(51, 51, 51, 0.168);*/
     text-align:center;
    /* overflow: auto; */
 }
@@ -136,4 +199,14 @@ h1 {
 
 .card {
     block-size: auto;
+}
+
+a{
+    text-decoration:none !important;
+}
+
+.remove-btn{
+    background:none !important;
+    border:none !important;
+    outline:none !important;
 }

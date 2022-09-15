@@ -6,7 +6,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h3>Editing  Archive</h3>
+<div class="container">
+    <h3>Editing  Archive</h3>
 
 <hr class="my-3" />
 
@@ -91,19 +92,19 @@
             <div class="row my-2">
                 <div class="col-4">
                     <label asp-for="StartTime"></label><span class="text-danger">*</span>
-                    <input asp-for="StartTime" placeholder="" type="date" value="@Model.StartTime"  class="form-control" >
+                    <input asp-for="StartTime" placeholder="" type="date" value="@Model.StartTime.ToString("yyyy-MM-dd")"  class="form-control" >
                       <span asp-validation-for="StartTime" class="text-danger"></span>
                 </div>
 
                  <div class="col-4">
                     <label asp-for="EndTime"></label><span class="text-danger">*</span>
-                    <input asp-for="EndTime" placeholder=""  value="@Model.EndTime" type="date" class="form-control">
+                    <input asp-for="EndTime" placeholder=""  value="@Model.EndTime.ToString("yyyy-MM-dd")" type="date" class="form-control">
                       <span asp-validation-for="EndTime" class="text-danger"></span>
                  </div>
 
                  <div class="col-4">
                     <label asp-for="ReleaseTime"></label><span class="text-danger">*</span>
-                    <input asp-for="ReleaseTime" placeholder=""  value="@Model.ReleaseTime" type="date" class="form-control">
+                    <input asp-for="ReleaseTime" placeholder=""  value="@Model.ReleaseTime.ToString("yyyy-MM-dd")" asp-format="{0:yyyy-MM-dd}" type="date" class="form-control">
                       <span asp-validation-for="ReleaseTime" class="text-danger"></span>
                  </div>
             </div>
@@ -117,19 +118,10 @@
             </div>
         </div>
     </form>  
+</div>
 
 
-    <script>
-
-        const updateDetails = document.querySelector("#updateDetails");
-        const testResults = document.querySelector("#testResults");
-
-        document.addEventListener("DOMContentLoaded",function(){
-            updateDetails.value = "Update Details are shown here";
-            testResults.value = "Test Results are shown here";
-        });
-
-    </script>
+  
 
 
     @section Scripts{

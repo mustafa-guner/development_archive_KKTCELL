@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using _archive.Data.Enums;
+@using Newtonsoft.Json.Linq;
+
+
+@{
+    var sessionString = Context.Session.GetString("user");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,64 +19,98 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Qwitcher+Grypen&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="https://ffo3gv1cf3ir.merlincdn.net/static_lib/assetsv2/common/images/content/turkcell-logo.png?1773534948009" sizes="32x32">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.css" integrity="sha512-72McA95q/YhjwmWFMGe8RI3aZIMCTJWPBbV8iQY3jy1z9+bi6+jHnERuNrDPo/WGYEzzNs4WdHNyyEr/yXJ9pA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light turkcell-bg-color-blue mb-4">
-          <div class="container-fluid">
-             <a class="navbar-brand text-white d-flex align-self-center align-items-center" asp-area=""  asp-controller="Record" asp-action="Index">
-                <img src="https://ffo3gv1cf3ir.merlincdn.net/static_lib/assetsv2/common/images/content/turkcell-logo.png?1773534948009" class="turkcell-logo" alt="Turkcell">
-                <div class="mx-2">
-                 <span class="turkcell-yellow ">Archive</span>
-                 <span class="ml-0 px-0 fw-bold text-white archive-logo-text">Cell</span>
+    @if (sessionString != null)
+    {
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light turkcell-bg-color-blue mb-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand text-white d-flex align-self-center align-items-center" asp-area="" asp-controller="Record" asp-action="Index">
+                        <img src="https://ffo3gv1cf3ir.merlincdn.net/static_lib/assetsv2/common/images/content/turkcell-logo.png?1773534948009" class="turkcell-logo" alt="Turkcell">
+                        <div class="px-2">
+                            <span class="turkcell-yellow ">Archive</span>
+                            <span class="ml-0 px-0 fw-bold text-white archive-logo-text">Cell</span>
+                        </div>
+                    </a>
+                    <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarText">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Record" asp-action="Index">Records</a>
+                            </li>
+
+                          @*  //Checking if user is an admin (roles,Admin = 1)*@
+                            @if (JObject.Parse(sessionString)["role"].ToString() == UsersRoles.Admin.ToString())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="Users">Users</a>
+                                </li>
+                            }
+                        </ul>
+                        <!--Checking user's session if already logged in or not-->
+                    <div class="nav-item mx-4"> <a class="nav-link px-0 text-white" asp-area="" asp-controller="Profile" asp-route-id="@JObject.Parse(sessionString)["id"].ToString()" asp-action="Profile">Profile</a>  </div>
+                    <div class="nav-item"> <a class="nav-link px-0 text-white d-flex align-items-center" asp-area="" asp-controller="Auth" asp-action="Logout">Logout <i class="mx-1 fa fa-sign-out" aria-hidden="true"></i></a>  </div>
+                   
                 </div>
-             </a>
-            <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarText">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    @if (Context.Session.GetString("username") != null)
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Record" asp-action="Index">Records</a>
-                        </li>
-                    }
-               
-              </ul>
+                </div>
+            </nav>
+        </header>
+    }
 
 
-              <!--Checking user's session if already logged in or not-->
-             
-             @if (Context.Session.GetString("username") != null)
-                    {
-                        <div class="nav-item"> <a class="nav-link px-0 text-white" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>  </div>
-                    }
-                   @* else
-                    {
-                         <div class="nav-item"> <a class="nav-link px-0 text-white" asp-area="" asp-controller="Auth" asp-action="Login">Login</a>  </div>
-                    }*@
+    <main role="main" >
+        @RenderBody()
+    </main>
 
-
-            </div>
-          </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
+@*    <footer class="border-top footer text-muted">
         <div class="container text-center">
             &copy; 2022 - ArchiveCell
         </div>
-    </footer>
+    </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
- 
+
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    function removeModal(event){
+      
+
+           const swalWithBootstrapButtons = Swal.mixin({
+               customClass:{
+                   confirmButton:"btn btn-success",
+                   cancelButton:"btn btn-danger"
+               },
+               buttonStyling:false
+           });
+
+           swalWithBootstrapButtons.fire({
+           title: 'Are you sure to remove?',
+           iconHtml: '<img class="w-100 h-100" src="http://localhost:5161/images/sadSelo.png"/>',
+           customClass:{
+               icon:"border-none"
+           },
+           showCancelButton: true,
+           confirmButtonText: 'Yes, remove!',
+           cancelButtonText: 'No, cancel',
+           reverseButtons: true,
+
+       }).then((result) => {
+           if (result.isConfirmed) {
+               $("form").submit();
+
+             
+           }
+       })
+    }
+</script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
